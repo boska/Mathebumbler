@@ -66,7 +66,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [fetchRequest setEntity:entity];
     NSArray *fetchedObjects = [managedObjectContext executeFetchRequest:fetchRequest error:nil];
     for (Entity *e in fetchedObjects) {
-        NSLog(@"Name: %@", [e valueForKey:@"subject1"]);
+        NSLog(@"%@ %@ %@ %@", [e valueForKey:@"subject1"],[e valueForKey:@"subject2"],[e valueForKey:@"subject3"],[e valueForKey:@"subject4"]);
 
     }
 }

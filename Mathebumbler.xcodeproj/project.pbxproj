@@ -25,6 +25,8 @@
 		8D429DE31674E6F700865019 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D429DE21674E6F700865019 /* CoreData.framework */; };
 		8D429E251674EC1400865019 /* _Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D429E221674EC1400865019 /* _Entity.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8D429E261674EC1400865019 /* Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D429E241674EC1400865019 /* Entity.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8D429E2A1674F52C00865019 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D429E281674F52C00865019 /* ListViewController.m */; };
+		8D429E2B1674F52C00865019 /* ListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D429E291674F52C00865019 /* ListViewController.xib */; };
 		8DE975A31668ECE4005DD0E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DE975A21668ECE4005DD0E4 /* UIKit.framework */; };
 		8DE975A51668ECE4005DD0E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DE975A41668ECE4005DD0E4 /* Foundation.framework */; };
 		8DE975A71668ECE4005DD0E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DE975A61668ECE4005DD0E4 /* CoreGraphics.framework */; };
@@ -84,6 +86,9 @@
 		8D429E221674EC1400865019 /* _Entity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _Entity.m; sourceTree = SOURCE_ROOT; };
 		8D429E231674EC1400865019 /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = SOURCE_ROOT; };
 		8D429E241674EC1400865019 /* Entity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Entity.m; sourceTree = SOURCE_ROOT; };
+		8D429E271674F52C00865019 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
+		8D429E281674F52C00865019 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		8D429E291674F52C00865019 /* ListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListViewController.xib; sourceTree = "<group>"; };
 		8DE9759E1668ECE4005DD0E4 /* Mathebumbler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mathebumbler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DE975A21668ECE4005DD0E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8DE975A41668ECE4005DD0E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -234,6 +239,9 @@
 				8D429DDE1674E5FA00865019 /* mathebumbler.xcdatamodeld */,
 				8DE975B21668ECE5005DD0E4 /* BZAppDelegate.m */,
 				8DE975BA1668ECE5005DD0E4 /* MainStoryboard.storyboard */,
+				8D429E271674F52C00865019 /* ListViewController.h */,
+				8D429E281674F52C00865019 /* ListViewController.m */,
+				8D429E291674F52C00865019 /* ListViewController.xib */,
 				8DE975BD1668ECE5005DD0E4 /* BZFirstViewController.h */,
 				8DE975BE1668ECE5005DD0E4 /* BZFirstViewController.m */,
 				8DE975C01668ECE5005DD0E4 /* first.png */,
@@ -402,6 +410,7 @@
 				8DE9764D16691391005DD0E4 /* FBUserSettingsViewResources.bundle in Resources */,
 				8DFBE3EC16746A11004636DF /* start4s.png in Resources */,
 				8DFBE3EE16746A20004636DF /* Default@2x.png in Resources */,
+				8D429E2B1674F52C00865019 /* ListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +475,7 @@
 				8D429DE01674E5FA00865019 /* mathebumbler.xcdatamodeld in Sources */,
 				8D429E251674EC1400865019 /* _Entity.m in Sources */,
 				8D429E261674EC1400865019 /* Entity.m in Sources */,
+				8D429E2A1674F52C00865019 /* ListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
