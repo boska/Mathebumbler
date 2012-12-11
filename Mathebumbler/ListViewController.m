@@ -14,6 +14,10 @@
 #import "UIImageView+AFNetworking.h"
 #import "BlockActionSheet.h"
 #define QsPerPage 10
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @interface ListViewController ()
 
 @end
@@ -312,15 +316,15 @@
         Entity *e = [sectionInfo.objects objectAtIndex:0];
 
          UIView *sectionView = [[UIView alloc] init];
-        sectionView.frame = CGRectMake(0, 0, 320   ,27);
-        sectionView.backgroundColor = [UIColor lightGrayColor];
+        sectionView.frame = CGRectMake(0, 0, 320   ,20);
+        sectionView.backgroundColor = UIColorFromRGB(0x66C1FF);
         
         
         UILabel *dateLabel = [[UILabel alloc] init];
         dateLabel.frame = sectionView.frame ;
         dateLabel.font = [UIFont boldSystemFontOfSize:10];
         //dateLabel.textAlignment = UITextAlignmentCenter;
-        dateLabel.textColor = [UIColor darkGrayColor];
+        dateLabel.textColor = [UIColor whiteColor];
         dateLabel.backgroundColor = [UIColor clearColor];
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"yyyy-MM-dd"];
@@ -341,7 +345,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 27;
+    return 20;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -358,6 +362,10 @@
     [sheet addButtonWithTitle:@"Comment" handler:^{
         
     }];
+    [sheet addButtonWithTitle:@"Copy" handler:^{
+        [UIPasteboard generalPasteboard].string = cell.quotes.text;
+    }];
+
     sheet.destructiveButtonIndex = [sheet addButtonWithTitle:@"cancel" handler:nil];
     BZAppDelegate *appDelegte = (BZAppDelegate *)[[UIApplication sharedApplication] delegate];
     [sheet showInView:appDelegte.window.rootViewController.view];
@@ -368,7 +376,7 @@
 
 }
 - (void)voteGreen:(id)sender
-{   
+{
     UITapGestureRecognizer *gesture = (UITapGestureRecognizer *)sender;
     NSIndexPath *path =  [self.myTableView indexPathForRowAtPoint:[gesture locationInView:self.myTableView]];
     //MTBTableViewCell *cell = (MTBTableViewCell*)[self.myTableView cellForRowAtIndexPath:path];
