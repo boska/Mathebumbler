@@ -60,7 +60,7 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
         case FBSessionStateOpen:
             if (!error) {
                 // We have a valid session
-                NSLog(@"User session found");
+                //NSLog(@"%@",session.accessToken);
             }
             break;
         case FBSessionStateClosed:
@@ -155,27 +155,44 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
          NSLog(@"facebook result: %@", result);
      }];
 }
--(void)loadQuotesFromTo:(NSNumber *)from :(NSNumber *)to
+-(AFJSONRequestOperation *)loadQuotesFromTo:(NSNumber *)from :(NSNumber *)to
 {
     NSString *url = [NSString stringWithFormat:@"http://mathebumbler.com/rest/list_page?p=%d&n=%d",from.intValue,to.intValue];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     AFJSONRequestOperation *rq = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        NSLog(@"%@",[JSON description]);
         NSArray *subject1 = [NSArray arrayWithArray:[JSON valueForKey:@"subject1"]];
         NSArray *subject2 = [NSArray arrayWithArray:[JSON valueForKey:@"subject2"]];
         NSArray *subject3 = [NSArray arrayWithArray:[JSON valueForKey:@"subject3"]];
         NSArray *subject4 = [NSArray arrayWithArray:[JSON valueForKey:@"subject4"]];
-       
+        NSArray *uid = [NSArray arrayWithArray:[JSON valueForKey:@"member_num"]];
+        NSArray *date = [NSArray arrayWithArray:[JSON valueForKey:@"buildtime"]];
+        NSArray *votegreen = [NSArray arrayWithArray:[JSON valueForKey:@"vote_like"]];
+        NSArray *voteblue = [NSArray arrayWithArray:[JSON valueForKey:@"vote_dislike"]];
+
         for (int i=0;i<subject1.count;i++) {
+            
             Entity *e = [Entity insertInManagedObjectContext:self.managedObjectContext];
             [e setSubject1:[subject1 objectAtIndex:i]];
             [e setSubject2:[subject2 objectAtIndex:i]];
             [e setSubject3:[subject3 objectAtIndex:i]];
             [e setSubject4:[subject4 objectAtIndex:i]];
+            [e setUid:[uid objectAtIndex:i]];
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            [df setDateFormat:@"yyyy-MM-dd hh:mm:ss a"];
+            //NSDate *datecreate = [df dateFromString:[date objectAtIndex:i]];
+            [e setDate:[df dateFromString:[date objectAtIndex:i]]];
+            NSLog(@"%@",e.date.description);
+            NSString *vg = [votegreen objectAtIndex:i];
+            [e setVotegreen:[NSNumber numberWithInt:vg.intValue]];
+            NSString *vb = [voteblue objectAtIndex:i];
+            [e setVoteblue:[NSNumber numberWithInt:vb.intValue]];
+             
         }
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         //
     }];
-    [rq start];
+    return rq;
 
 }
 @end

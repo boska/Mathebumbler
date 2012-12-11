@@ -26,9 +26,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     [super viewDidLoad];
     [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
-    BZAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate loadQuotesFromTo:[NSNumber numberWithInt:0]:[NSNumber numberWithInt:20] ];
-    [self.view setBackgroundColor:UIColorFromRGB(0x7ACEFF)];
+        [self.view setBackgroundColor:UIColorFromRGB(0x7ACEFF)];
 }
 - (IBAction)authButtonAction:(id)sender{
     BZAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -45,13 +43,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     BZAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate getFBid];
-    self.managedObjectContext = appDelegate.managedObjectContext;
-    Entity *e = [Entity insertInManagedObjectContext:self.managedObjectContext];
-    e.subject1 = @"aa";
-    e.subject2 = @"aa";
-    e.subject3 = @"3";
-    e.subject4 = @"3";
-    //[self.managedObjectContext save:nil];
+       //[self.managedObjectContext save:nil];
 
 }
 - (void)loadQuotes
@@ -60,6 +52,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 - (IBAction)dissmissKeyboard:(id)sender
 {
+    BZAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.managedObjectContext = appDelegate.managedObjectContext;
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription
                                    entityForName:@"Entity" inManagedObjectContext:managedObjectContext];
