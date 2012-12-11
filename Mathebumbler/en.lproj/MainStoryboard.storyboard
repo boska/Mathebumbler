@@ -25,36 +25,6 @@
                                     <action selector="authButtonAction:" destination="2" eventType="touchUpInside" id="Bda-ip-Q1s"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="為之者疾" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z4y-on-T6I">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="hCv-H8-ZWR"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="29"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="生之者眾" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rds-jz-wSs">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="128" id="rjs-ae-dL3"/>
-                                    <constraint firstAttribute="height" constant="38" id="slK-7T-Z0P"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="29"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="食之者寡" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4Yi-3n-LuY">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="125" id="knX-co-5Tw"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="29"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="用之者舒" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mn9-0U-TvA">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="naE-Qq-mID"/>
-                                </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="29"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bl4-hI-RGo">
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Button">
@@ -68,24 +38,39 @@
                                     <action selector="dissmissKeyboard:" destination="2" eventType="touchUpInside" id="VD5-Iu-C9U"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="mtb@2x.png" translatesAutoresizingMaskIntoConstraints="NO" id="V9v-22-9Up">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="BtI-1j-mpi"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="學者治國,全然無方,自恃無弊,何以見得。" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cez-gI-aEy">
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="學者治國" textAlignment="center" minimumFontSize="26" background="textfield@2x.png" translatesAutoresizingMaskIntoConstraints="NO" id="PtS-0H-fQP">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="156" id="GTm-oQ-JSC"/>
+                                    <constraint firstAttribute="height" constant="36" id="oHu-s3-DEz"/>
+                                </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="21"/>
+                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="Rds-jz-wSs" firstAttribute="trailing" secondItem="4Yi-3n-LuY" secondAttribute="trailing" type="default" id="4yb-wG-Shb"/>
-                            <constraint firstItem="z4y-on-T6I" firstAttribute="top" secondItem="16" secondAttribute="top" constant="247" id="AUI-6L-n3N"/>
-                            <constraint firstItem="Mn9-0U-TvA" firstAttribute="trailing" secondItem="z4y-on-T6I" secondAttribute="trailing" type="default" id="BLN-Z4-ieJ"/>
-                            <constraint firstItem="yl4-iJ-JHg" firstAttribute="leading" secondItem="16" secondAttribute="leading" constant="8" id="DKG-nN-MXg"/>
-                            <constraint firstItem="Rds-jz-wSs" firstAttribute="top" secondItem="16" secondAttribute="top" constant="122" id="Fn7-Da-y4D"/>
-                            <constraint firstItem="z4y-on-T6I" firstAttribute="baseline" secondItem="Mn9-0U-TvA" secondAttribute="baseline" type="default" id="KgM-MG-EvP"/>
-                            <constraint firstItem="4Yi-3n-LuY" firstAttribute="top" secondItem="16" secondAttribute="top" constant="186" id="N9O-7S-dd3"/>
-                            <constraint firstItem="4Yi-3n-LuY" firstAttribute="leading" secondItem="z4y-on-T6I" secondAttribute="leading" type="default" id="Ngp-vU-PXU"/>
-                            <constraint firstItem="z4y-on-T6I" firstAttribute="leading" secondItem="Mn9-0U-TvA" secondAttribute="leading" type="default" id="PeK-Zw-95P"/>
-                            <constraint firstAttribute="bottom" secondItem="Mn9-0U-TvA" secondAttribute="bottom" constant="155" id="TCF-Zg-2aH"/>
+                            <constraint firstItem="V9v-22-9Up" firstAttribute="leading" secondItem="16" secondAttribute="leading" type="default" id="BOv-NS-eDK"/>
+                            <constraint firstItem="V9v-22-9Up" firstAttribute="trailing" secondItem="16" secondAttribute="trailing" type="default" id="BqY-MR-pTa"/>
+                            <constraint firstItem="PtS-0H-fQP" firstAttribute="top" secondItem="16" secondAttribute="top" constant="138" id="CYJ-pO-H7l"/>
+                            <constraint firstItem="PtS-0H-fQP" firstAttribute="centerX" secondItem="cez-gI-aEy" secondAttribute="centerX" type="default" id="Fqn-eh-TCD"/>
+                            <constraint firstItem="cez-gI-aEy" firstAttribute="leading" secondItem="yl4-iJ-JHg" secondAttribute="leading" type="default" id="HfH-yc-9rn"/>
+                            <constraint firstItem="cez-gI-aEy" firstAttribute="top" secondItem="V9v-22-9Up" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Htn-U9-tR3"/>
                             <constraint firstAttribute="trailing" secondItem="bl4-hI-RGo" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="WwP-LA-tj8"/>
+                            <constraint firstItem="V9v-22-9Up" firstAttribute="top" secondItem="16" secondAttribute="top" constant="49" id="bQO-9k-Hmg"/>
                             <constraint firstItem="bl4-hI-RGo" firstAttribute="baseline" secondItem="yl4-iJ-JHg" secondAttribute="baseline" type="default" id="nOL-q5-Evj"/>
-                            <constraint firstItem="Rds-jz-wSs" firstAttribute="centerX" secondItem="16" secondAttribute="centerX" type="default" id="s4A-W8-CrN"/>
+                            <constraint firstItem="cez-gI-aEy" firstAttribute="centerX" secondItem="V9v-22-9Up" secondAttribute="centerX" type="default" id="qwa-3Z-Dub"/>
                             <constraint firstAttribute="bottom" secondItem="yl4-iJ-JHg" secondAttribute="bottom" constant="7" id="vBS-fQ-gU3"/>
-                            <constraint firstItem="z4y-on-T6I" firstAttribute="trailing" secondItem="4Yi-3n-LuY" secondAttribute="trailing" type="default" id="yAQ-Vt-yh6"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="First" image="first" id="7"/>
@@ -206,7 +191,9 @@
     </scenes>
     <resources>
         <image name="first" width="16" height="16"/>
+        <image name="mtb@2x.png" width="640" height="64"/>
         <image name="second" width="16" height="16"/>
+        <image name="textfield@2x.png" width="200" height="46"/>
     </resources>
     <classes>
         <class className="BZFirstViewController" superclassName="UIViewController">
@@ -228,7 +215,11 @@
         <class className="MTBTableViewCell" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTBTableViewCell.h"/>
             <relationships>
+                <relationship kind="outlet" name="blue" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="blueconut" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="date" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="green" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="greencount" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="name" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="quotes" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="thumbnail" candidateClass="UIImageView"/>

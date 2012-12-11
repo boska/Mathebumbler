@@ -195,7 +195,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-     NSLog(@"%d,%d",indexPath.row,indexPath.section);
+     //NSLog(@"%d,%d",indexPath.row,indexPath.section);
     static NSString *CellIdentifier = @"MTBTableViewCell";
     MTBTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -204,7 +204,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     //Entity *e = [fetchObjects objectAtIndex:indexPath.row];
     Entity *e = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    NSLog(@"%@",e.votekind);
+    //NSLog(@"%@",e.votekind);
     //NSLog(@"%@,%@,%@,%@。",e.subject1,e.subject2,e.subject3,e.subject4);
     //convert date to string
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
