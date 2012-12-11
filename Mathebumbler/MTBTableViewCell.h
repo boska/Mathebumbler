@@ -13,6 +13,10 @@
 @property (strong,nonatomic) IBOutlet UILabel *quotes;
 @property (strong,nonatomic) IBOutlet UILabel *name;
 @property (strong,nonatomic) IBOutlet UILabel *date;
+@property (strong,nonatomic) IBOutlet UIButton *blue;
+@property (strong,nonatomic) IBOutlet UIButton *green;
 
+@property (strong,nonatomic) IBOutlet UILabel *greencount;
+@property (strong,nonatomic) IBOutlet UILabel *blueconut;
 
 @end

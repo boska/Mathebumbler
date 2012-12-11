@@ -14,6 +14,7 @@ const struct EntityAttributes EntityAttributes = {
 	.uid = @"uid",
 	.voteblue = @"voteblue",
 	.votegreen = @"votegreen",
+	.votekind = @"votekind",
 };
 
 const struct EntityRelationships EntityRelationships = {
@@ -166,6 +167,13 @@ const struct EntityFetchedProperties EntityFetchedProperties = {
 - (void)setPrimitiveVotegreenValue:(int32_t)value_ {
 	[self setPrimitiveVotegreen:[NSNumber numberWithInt:value_]];
 }
+
+
+
+
+
+@dynamic votekind;
+
 
 
 

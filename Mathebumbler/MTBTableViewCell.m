@@ -13,6 +13,10 @@
 @synthesize quotes;
 @synthesize date;
 @synthesize thumbnail;
+@synthesize blue;
+@synthesize green;
+@synthesize blueconut;
+@synthesize greencount;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

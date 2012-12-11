@@ -29,4 +29,5 @@ extern NSString *const FBSessionStateChangedNotification;
 - (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI;
 - (void)getFBid;
 - (AFJSONRequestOperation *)loadQuotesFromTo:(NSNumber *)from:(NSNumber *)to;
+- (AFJSONRequestOperation *)getFBNameMe;
 @end

@@ -60,7 +60,18 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
         case FBSessionStateOpen:
             if (!error) {
                 // We have a valid session
-                //NSLog(@"%@",session.accessToken);
+                NSLog(@"%@",session.accessToken);
+                [[NSUserDefaults standardUserDefaults] setObject:session.accessToken forKey:@"fb_access_token"];
+                [[NSUserDefaults standardUserDefaults] setObject:session.expirationDate forKey:@"fb_exp_date"];
+                
+                [FBRequestConnection startForMeWithCompletionHandler:
+                 ^(FBRequestConnection *connection, id result, NSError *error)
+                 {
+                     NSLog(@"facebook id: %@", [result valueForKey:@"id"]);
+                     [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"id"] forKey:@"fb_id"];
+
+                 }];
+
             }
             break;
         case FBSessionStateClosed:
@@ -149,11 +160,6 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
 }
 -(void)getFBid
 {
-    [FBRequestConnection startForMeWithCompletionHandler:
-     ^(FBRequestConnection *connection, id result, NSError *error)
-     {
-         NSLog(@"facebook result: %@", result);
-     }];
 }
 -(AFJSONRequestOperation *)loadQuotesFromTo:(NSNumber *)from :(NSNumber *)to
 {
@@ -166,6 +172,8 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
         NSArray *subject3 = [NSArray arrayWithArray:[JSON valueForKey:@"subject3"]];
         NSArray *subject4 = [NSArray arrayWithArray:[JSON valueForKey:@"subject4"]];
         NSArray *uid = [NSArray arrayWithArray:[JSON valueForKey:@"member_num"]];
+        NSArray *qid = [NSArray arrayWithArray:[JSON valueForKey:@"num"]];
+
         NSArray *date = [NSArray arrayWithArray:[JSON valueForKey:@"buildtime"]];
         NSArray *votegreen = [NSArray arrayWithArray:[JSON valueForKey:@"vote_like"]];
         NSArray *voteblue = [NSArray arrayWithArray:[JSON valueForKey:@"vote_dislike"]];
@@ -178,11 +186,13 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
             [e setSubject3:[subject3 objectAtIndex:i]];
             [e setSubject4:[subject4 objectAtIndex:i]];
             [e setUid:[uid objectAtIndex:i]];
+            [e setQid:[qid objectAtIndex:i]];
+            e.qid = [qid objectAtIndex:i];
             NSDateFormatter *df = [[NSDateFormatter alloc] init];
             [df setDateFormat:@"yyyy-MM-dd hh:mm:ss a"];
             //NSDate *datecreate = [df dateFromString:[date objectAtIndex:i]];
             [e setDate:[df dateFromString:[date objectAtIndex:i]]];
-            NSLog(@"%@",e.date.description);
+            NSLog(@"%@",e.qid);
             NSString *vg = [votegreen objectAtIndex:i];
             [e setVotegreen:[NSNumber numberWithInt:vg.intValue]];
             NSString *vb = [voteblue objectAtIndex:i];
@@ -194,5 +204,20 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
     }];
     return rq;
 
+}
+-(AFJSONRequestOperation *)getFBNameMe
+{
+    FBSession *session;
+    session = FBSession.activeSession;
+    
+    NSString *urlstring = [NSString stringWithFormat:@"https://graph.facebook.com/me?access_token=%@",session.accessToken];
+    NSURL *url = [NSURL URLWithString:urlstring];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    AFJSONRequestOperation *rq = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        //
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        //
+    }];
+    return rq;
 }
 @end

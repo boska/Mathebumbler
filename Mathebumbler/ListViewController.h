@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ListViewController : UITableViewController <NSFetchedResultsControllerDelegate , UITableViewDataSource,UITableViewDelegate>{
+@interface ListViewController : UITableViewController <UIGestureRecognizerDelegate,NSFetchedResultsControllerDelegate , UITableViewDataSource,UITableViewDelegate>{
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
 }
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
+@property (nonatomic) int currentPage;
+@property (nonatomic) int endPage;
+@property (nonatomic) BOOL loadingState;
 @property (nonatomic, strong) NSMutableArray *fetchObjects;
 @property (nonatomic, strong) IBOutlet UITableView *myTableView;
 

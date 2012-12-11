@@ -15,6 +15,7 @@ extern const struct EntityAttributes {
 	__unsafe_unretained NSString *uid;
 	__unsafe_unretained NSString *voteblue;
 	__unsafe_unretained NSString *votegreen;
+	__unsafe_unretained NSString *votekind;
 } EntityAttributes;
 
 extern const struct EntityRelationships {
@@ -22,6 +23,7 @@ extern const struct EntityRelationships {
 
 extern const struct EntityFetchedProperties {
 } EntityFetchedProperties;
+
 
 
 
@@ -135,6 +137,14 @@ extern const struct EntityFetchedProperties {
 
 
 
+@property (nonatomic, retain) NSString* votekind;
+
+
+//- (BOOL)validateVotekind:(id*)value_ error:(NSError**)error_;
+
+
+
+
 
 
 @end
@@ -208,6 +218,12 @@ extern const struct EntityFetchedProperties {
 
 - (int32_t)primitiveVotegreenValue;
 - (void)setPrimitiveVotegreenValue:(int32_t)value_;
+
+
+
+
+- (NSString*)primitiveVotekind;
+- (void)setPrimitiveVotekind:(NSString*)value;
 
 
 
