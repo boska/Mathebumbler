@@ -8,13 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BZFirstViewController : UIViewController <NSFetchedResultsControllerDelegate>{
+@interface BZFirstViewController : UIViewController <NSFetchedResultsControllerDelegate,UITextFieldDelegate>{
     NSFetchedResultsController *fetchedResultsController;
     NSManagedObjectContext *managedObjectContext;
 }
+@property (nonatomic, strong) NSMutableArray *qArray;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) IBOutlet UITextField *inputField;
+@property (nonatomic, strong) IBOutlet UIButton *sendButton;
+
+@property (nonatomic ,strong) IBOutlet UILabel *ouputField;
+@property (nonatomic) int count;
 - (IBAction)authButtonAction:(id)sender;
 - (IBAction)dissmissKeyboard:(id)sender;
+- (IBAction)commit:(id)sender;
 
 @end

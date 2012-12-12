@@ -11,6 +11,7 @@
 #import "BzQuotes.h"
 #import "BZAppDelegate.h"
 #import "Entity.h"
+#import "BlockAlertView.h"
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
@@ -21,10 +22,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @implementation BZFirstViewController
 @synthesize managedObjectContext;
+@synthesize inputField,ouputField,qArray;
 @synthesize fetchedResultsController;
+@synthesize count,sendButton;
 - (void)viewDidLoad
 {
+    count = 0;
+    sendButton.hidden = YES;
     [super viewDidLoad];
+    qArray = [NSMutableArray arrayWithObjects:@"",@"",@"",@"",nil];
+    inputField.delegate = self;
     [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
         [self.view setBackgroundColor:UIColorFromRGB(0x7ACEFF)];
 }
@@ -39,6 +46,72 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return (newLength > 4) ? NO : YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    
+    count+=1;
+    NSLog(@"%d",count);
+    switch (count) {
+        case 1:
+            //dd
+            [self.ouputField setText:[NSString stringWithString:inputField.text]];
+            [qArray replaceObjectAtIndex:0 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            inputField.text = @"";
+            NSLog(@"%@",ouputField.text);
+            break;
+        case 2:
+            [self.ouputField setText:[NSString stringWithFormat:@"%@,%@",self.ouputField.text,inputField.text]];
+            [qArray replaceObjectAtIndex:1 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+
+            inputField.text = @"";
+
+            //
+            break;
+        case 3:
+            //
+            [self.ouputField setText:[NSString stringWithFormat:@"%@,%@",self.ouputField.text,inputField.text]];
+            [qArray replaceObjectAtIndex:2 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+
+            inputField.text = @"";
+            
+
+            break;
+        case 4:{
+            [self.ouputField setText:[NSString stringWithFormat:@"%@,%@。",self.ouputField.text,inputField.text]];
+            [qArray replaceObjectAtIndex:3 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+
+            [inputField resignFirstResponder];
+            inputField.text = @"";
+            sendButton.hidden = NO;
+            //
+            count = 0;
+            break;
+            }
+        default:
+            
+            break;
+    }
+    //NSLog(@"%@",qArray.description);
+}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    
+     //  [textField resignFirstResponder];
+    [self textFieldDidEndEditing:textField];
+    return  YES;
+}
+-(BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    if (textField.text.length == 4) {
+        //textField.text = @"";
+        return YES;
+    }
+    return NO;
+}
 - (void)viewDidAppear:(BOOL)animated
 {
     BZAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -49,6 +122,35 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)loadQuotes
 {
     
+}
+- (IBAction)commit:(id)sender
+{
+    NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
+
+    NSString *urlstring = [NSString stringWithFormat:@"http://mathebumbler.com/rest/insert?s1=%@&s2=%@&s3=%@&s4=%@&fbid=%@",
+                           [qArray objectAtIndex:0],
+                           [qArray objectAtIndex:1],
+                           [qArray objectAtIndex:2],
+                           [qArray objectAtIndex:3],
+                           fb_id
+                           ];
+    NSLog(@"%@",urlstring);
+    NSURL *url = [NSURL URLWithString:urlstring];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    BlockAlertView *alert =[[BlockAlertView alloc]initWithTitle:@"thank you !" message:@""];
+    alert.cancelButtonIndex = [alert addButtonWithTitle:@"OK" handler:^{
+        //[readerView start];
+    }];
+    AFJSONRequestOperation *rq = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+     
+        sendButton.hidden = YES;
+        [alert show];
+
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        //
+    }];
+    
+    [rq start];
 }
 - (IBAction)dissmissKeyboard:(id)sender
 {
