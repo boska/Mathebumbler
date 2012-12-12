@@ -13,7 +13,10 @@
 #import "AFImageRequestOperation.h"
 #import "UIImageView+AFNetworking.h"
 #import "BlockActionSheet.h"
+#import "PrettySectionHeaderView.h"
+
 #define QsPerPage 10
+#define BACKGROUND [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]]
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
@@ -47,10 +50,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
      BZAppDelegate *appDelegate = (BZAppDelegate *)[[UIApplication sharedApplication] delegate];
     myTableView.dataSource = self;
     myTableView.delegate = self;
+    myTableView.backgroundColor = BACKGROUND;
     managedObjectContext = appDelegate.managedObjectContext;
-    
-    // 
-    
+    //
+    self.refreshControl = [[UIRefreshControl alloc]init];
+    [self.refreshControl setTintColor:UIColorFromRGB(0x66C1FF)];
+    [self.refreshControl setBackgroundColor:BACKGROUND];
+    //    self.refreshControl.tintColor = [UIColor blueColor];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"PullToRefresh"];
+    [self.refreshControl addTarget:self action:@selector(pulldown:) forControlEvents:UIControlEventValueChanged];
     AFJSONRequestOperation *rq =  [appDelegate loadQuotesFromTo:[NSNumber numberWithInt:currentPage]:[NSNumber numberWithInt:QsPerPage] ];
    [rq setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
        NSArray *subject1 = [NSArray arrayWithArray:[responseObject valueForKey:@"subject1"]];
@@ -77,7 +85,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
            //NSDate *datecreate = [df dateFromString:[date objectAtIndex:i]];
            [e setDate:[df dateFromString:[date objectAtIndex:i]]];
            //[e setDate:[date objectAtIndex:i]];
-           NSLog(@"%@",e.date.description);
+           //NSLog(@"%@",e.date.description);
            NSString *vg = [votegreen objectAtIndex:i];
            [e setVotegreen:[NSNumber numberWithInt:vg.intValue]];
            NSString *vb = [voteblue objectAtIndex:i];
@@ -157,11 +165,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
        //
    }];
-    [rq start];
     
     //fetch qs
     //
     //[self updateVoteStatus:@"123"];
+    loadingState = YES;
+
+    [rq start];
+    //loadingState = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -198,6 +209,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
      //NSLog(@"%d,%d",indexPath.row,indexPath.section);
     static NSString *CellIdentifier = @"MTBTableViewCell";
     MTBTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background" ]];
     if (cell == nil) {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MTBTableViewCell" owner:self options:nil];
         cell = [nib objectAtIndex:0];
@@ -218,8 +230,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSString *urlstring = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture",e.uid];
     NSURL *url = [NSURL URLWithString:urlstring];
 
-   
-    [cell.thumbnail setImageWithURL:url placeholderImage:nil];
+    //cell.thumbnail = [[UIImageView alloc]init];
+    
+    [cell.thumbnail setImageWithURL:url placeholderImage:[UIImage imageNamed:@"background"]];
     cell.tag = e.qid.intValue;
     cell.name.text = e.name;
     cell.date.text = [formatter stringFromDate:e.date];
@@ -315,9 +328,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         
         Entity *e = [sectionInfo.objects objectAtIndex:0];
 
-         UIView *sectionView = [[UIView alloc] init];
-        sectionView.frame = CGRectMake(0, 0, 320   ,20);
-        sectionView.backgroundColor = UIColorFromRGB(0x66C1FF);
+        PrettySectionHeaderView *sectionView = [[PrettySectionHeaderView alloc]initWithFrame:CGRectMake(0, 0, 320, 20)];
+        sectionView.gradientStartColor = UIColorFromRGB(0x66C1FF);
+        sectionView.gradientEndColor = UIColorFromRGB(0x0066FF);
+        // UIView *sectionView = [[UIView alloc] init];
+        //sectionView.frame = CGRectMake(0, 0, 320   ,20);
+        //sectionView.backgroundColor = UIColorFromRGB(0x66C1FF);
         
         
         UILabel *dateLabel = [[UILabel alloc] init];
@@ -358,6 +374,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
     MTBTableViewCell *cell = (MTBTableViewCell *)[self tableView:myTableView cellForRowAtIndexPath:indexPath];
+    
     BlockActionSheet *sheet = [[BlockActionSheet alloc]initWithTitle:@""];
     [sheet addButtonWithTitle:@"Comment" handler:^{
         
@@ -506,33 +523,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                    break;
     }
 }
-- (void)scrollViewDidScroll:(UIScrollView *)aScrollView {
-    CGPoint offset = aScrollView.contentOffset;
-    CGRect bounds = aScrollView.bounds;
-    CGSize size = aScrollView.contentSize;
-    UIEdgeInsets inset = aScrollView.contentInset;
-    float y = offset.y + bounds.size.height - inset.bottom;
-    float h = size.height;
-    // NSLog(@"offset: %f", offset.y);
-    // NSLog(@"content.height: %f", size.height);
-    // NSLog(@"bounds.height: %f", bounds.size.height);
-    // NSLog(@"inset.top: %f", inset.top);
-    // NSLog(@"inset.bottom: %f", inset.bottom);
-    // NSLog(@"pos: %f of %f", y, h);
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     
-    float reload_distance = 50;
-    if(y > h + reload_distance) {
-        NSLog(@"load more rows");
-       
+    
+    NSInteger currentOffset = scrollView.contentOffset.y;
+    NSInteger maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height;
+    
+    
+    if (maximumOffset - currentOffset <= -40) {
         
-        if (!loadingState) {
-            loadingState = YES;
-            NSLog(@"load more rows");
-            [self loadMore];
-        }
-        // loading........
-        
-        
+        NSLog(@"reload");
+        [self loadMore];
     }
 }
 -(void)loadMore
@@ -631,7 +632,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         self.fetchedResultsController = controller;
         [self.fetchedResultsController performFetch:nil];
         [self.myTableView reloadData];
-        NSLog(@"%d secs",self.fetchedResultsController.sections.count);
+        NSLog(@"%d secs,%d",self.fetchedResultsController.sections.count,self.fetchedResultsController.fetchedObjects.count);
         loadingState = NO;
 
         //fetchObjects = [NSMutableArray arrayWithArray:[managedObjectContext executeFetchRequest:fetchRequest error:nil]];
@@ -651,4 +652,133 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
 
 }
+-(void)pulldown:(id)sender
+{
+    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(refresh:) userInfo:nil repeats:NO];
+
+}
+-(void)refresh:(id)sender
+{
+    BZAppDelegate *appDelegate = (BZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    currentPage = 0;
+    endPage = QsPerPage;
+    NSLog(@"refresh");
+    fetchedResultsController.delegate = nil;               // turn off delegate callbacks
+    for (Entity *e in [fetchedResultsController fetchedObjects]) {
+        [managedObjectContext deleteObject:e];
+    }
+    [self.managedObjectContext save:nil];
+    //NSError *error;
+    //if (![fetchedResultsController performFetch:&error]) { // resync controller
+        // TODO: Handle the error appropriately.
+    //    NSLog(@"fetchMessages error %@, %@", error, [error userInfo]);
+    //}
+    
+    //   fetchedResultsController.delegate = self;
+    [myTableView reloadData];
+    //
+    
+    AFJSONRequestOperation *rq =  [appDelegate loadQuotesFromTo:[NSNumber numberWithInt:currentPage]:[NSNumber numberWithInt:QsPerPage] ];
+    [rq setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSArray *subject1 = [NSArray arrayWithArray:[responseObject valueForKey:@"subject1"]];
+        NSArray *subject2 = [NSArray arrayWithArray:[responseObject valueForKey:@"subject2"]];
+        NSArray *subject3 = [NSArray arrayWithArray:[responseObject valueForKey:@"subject3"]];
+        NSArray *subject4 = [NSArray arrayWithArray:[responseObject valueForKey:@"subject4"]];
+        NSArray *uid = [NSArray arrayWithArray:[responseObject valueForKey:@"member_num"]];
+        NSArray *qid = [NSArray arrayWithArray:[responseObject valueForKey:@"num"]];
+        NSArray *date = [NSArray arrayWithArray:[responseObject valueForKey:@"buildtime"]];
+        NSArray *votegreen = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_like"]];
+        NSArray *voteblue = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_dislike"]];
+        
+        for (int i=0;i<subject1.count;i++) {
+            
+            Entity *e = [Entity insertInManagedObjectContext:self.managedObjectContext];
+            [e setSubject1:[subject1 objectAtIndex:i]];
+            [e setSubject2:[subject2 objectAtIndex:i]];
+            [e setSubject3:[subject3 objectAtIndex:i]];
+            [e setSubject4:[subject4 objectAtIndex:i]];
+            [e setUid:[uid objectAtIndex:i]];
+            [e setQid:[qid objectAtIndex:i]];
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            [df setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+            //NSDate *datecreate = [df dateFromString:[date objectAtIndex:i]];
+            [e setDate:[df dateFromString:[date objectAtIndex:i]]];
+            //[e setDate:[date objectAtIndex:i]];
+            //NSLog(@"%@",e.date.description);
+            NSString *vg = [votegreen objectAtIndex:i];
+            [e setVotegreen:[NSNumber numberWithInt:vg.intValue]];
+            NSString *vb = [voteblue objectAtIndex:i];
+            [e setVoteblue:[NSNumber numberWithInt:vb.intValue]];
+            
+            //get name from fb api
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@",[uid objectAtIndex:i]]];
+            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+            
+            AFJSONRequestOperation *rq = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                NSString *user_name = [JSON valueForKey:@"name"];
+                e.name = user_name;
+                
+                [myTableView reloadData];
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                //
+            }];
+            [rq start];
+            
+            NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
+            
+            NSURL *urlvote = [NSURL URLWithString:[NSString stringWithFormat:@"http://mathebumbler.com/rest/list_single?n=%@&fbid=%@",e.qid,fb_id]];
+            NSURLRequest *requestvote = [NSURLRequest requestWithURL:urlvote];
+            
+            AFJSONRequestOperation *getVotekind = [AFJSONRequestOperation JSONRequestOperationWithRequest:requestvote success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                //
+                NSString *votekind = [[JSON valueForKey:@"vote_kind"] lastObject];
+                if ([[JSON valueForKey:@"vote_kind"] lastObject] != [NSNull null]) {
+                    
+                    
+                    if ([votekind isEqualToString:@"blue"]) {
+                        // NSLog(@"%@,%@",qid,[[JSON valueForKey:@"vote_kind"] lastObject]);
+                        e.votekind = @"blue";
+                    } else if ([votekind isEqualToString:@"green"])
+                    {
+                        e.votekind = @"green";
+                        
+                    }
+                }
+                else {
+                    e.votekind = @"none";
+                }
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                //
+            }];
+            [getVotekind start];
+        }
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription
+                                       entityForName:@"Entity" inManagedObjectContext:managedObjectContext];
+        [fetchRequest setEntity:entity];
+        NSSortDescriptor *sort1 = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:NO];
+        [fetchRequest setSortDescriptors:[NSArray arrayWithObjects: sort1, nil]];
+        
+        
+        
+        self.fetchedResultsController.delegate =self;
+        NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                     managedObjectContext:managedObjectContext
+                                                                                       sectionNameKeyPath:@"date"
+                                                                                                cacheName:nil];
+        self.fetchedResultsController = controller;
+        [self.fetchedResultsController performFetch:nil];
+        [self.refreshControl endRefreshing];
+        [self.myTableView reloadData];
+        NSLog(@"%d secs %d",self.fetchedResultsController.sections.count,self.fetchedResultsController.fetchedObjects.count);
+        
+            
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    [rq start];
+
+    //[self.refreshControl endRefreshing];
+    // reconnect after mass delete
+ }
 @end

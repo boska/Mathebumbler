@@ -34,6 +34,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     inputField.delegate = self;
     [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
         [self.view setBackgroundColor:UIColorFromRGB(0x7ACEFF)];
+    
+
 }
 - (IBAction)authButtonAction:(id)sender{
     BZAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -52,7 +54,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    
+    sendButton.hidden = YES;
+
     count+=1;
     NSLog(@"%d",count);
     switch (count) {
@@ -62,12 +65,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             [qArray replaceObjectAtIndex:0 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
             inputField.text = @"";
             NSLog(@"%@",ouputField.text);
+            [inputField becomeFirstResponder];
             break;
         case 2:
             [self.ouputField setText:[NSString stringWithFormat:@"%@,%@",self.ouputField.text,inputField.text]];
             [qArray replaceObjectAtIndex:1 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
             inputField.text = @"";
+            [inputField becomeFirstResponder];
 
             //
             break;
@@ -77,7 +82,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             [qArray replaceObjectAtIndex:2 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
             inputField.text = @"";
-            
+            [inputField becomeFirstResponder];
+
 
             break;
         case 4:{
@@ -100,16 +106,18 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     
-     //  [textField resignFirstResponder];
-    [self textFieldDidEndEditing:textField];
+       [textField resignFirstResponder];
+    //[self textFieldDidEndEditing:textField];
     return  YES;
 }
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
+    //NSLog(@"tses");
     if (textField.text.length == 4) {
         //textField.text = @"";
         return YES;
     }
+    [self earthquake:textField];
     return NO;
 }
 - (void)viewDidAppear:(BOOL)animated
@@ -164,6 +172,35 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     for (Entity *e in fetchedObjects) {
         NSLog(@"%@ %@ %@ %@", [e valueForKey:@"subject1"],[e valueForKey:@"subject2"],[e valueForKey:@"subject3"],[e valueForKey:@"subject4"]);
 
+    }
+}
+- (void)earthquake:(UIView*)itemView
+{
+    CGFloat t = 2.0;
+    
+    CGAffineTransform leftQuake  = CGAffineTransformTranslate(CGAffineTransformIdentity, t, 0);
+    CGAffineTransform rightQuake = CGAffineTransformTranslate(CGAffineTransformIdentity, -t, 0);
+    
+    itemView.transform = leftQuake;  // starting point
+    
+    [UIView beginAnimations:@"earthquake" context:(__bridge void *)(itemView)];
+    [UIView setAnimationRepeatAutoreverses:YES]; // important
+    [UIView setAnimationRepeatCount:5];
+    [UIView setAnimationDuration:0.07];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(earthquakeEnded:finished:context:)];
+    
+    itemView.transform = rightQuake; // end here & auto-reverse
+    
+    [UIView commitAnimations];
+}
+
+- (void)earthquakeEnded:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context
+{
+    if ([finished boolValue])
+    {
+    	UIView* item = (__bridge UIView *)context;
+    	item.transform = CGAffineTransformIdentity;
     }
 }
 @end

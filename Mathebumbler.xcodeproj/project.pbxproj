@@ -83,6 +83,10 @@
 		A919D7511677334E0005FA3E /* green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A919D7491677334E0005FA3E /* green@2x.png */; };
 		A919D75C16773C070005FA3E /* BlockActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = A919D75916773C070005FA3E /* BlockActionSheet.m */; };
 		A919D75D16773C070005FA3E /* BlockAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A919D75B16773C070005FA3E /* BlockAlertView.m */; };
+		A9B5076A16786ADC00062A6F /* PrettySectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9B5076816786ADC00062A6F /* PrettySectionHeaderView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A9B5076E16786B6900062A6F /* PrettyDrawing.m in Sources */ = {isa = PBXBuildFile; fileRef = A9B5076C16786B6800062A6F /* PrettyDrawing.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A9B5077116786C1A00062A6F /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = A9B5076F16786C1A00062A6F /* background.png */; };
+		A9B5077216786C1A00062A6F /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9B5077016786C1A00062A6F /* background@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -182,6 +186,13 @@
 		A919D75916773C070005FA3E /* BlockActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockActionSheet.m; sourceTree = "<group>"; };
 		A919D75A16773C070005FA3E /* BlockAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockAlertView.h; sourceTree = "<group>"; };
 		A919D75B16773C070005FA3E /* BlockAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlockAlertView.m; sourceTree = "<group>"; };
+		A9B5076816786ADC00062A6F /* PrettySectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PrettySectionHeaderView.m; path = ../PrettySectionHeaderView.m; sourceTree = "<group>"; };
+		A9B5076916786ADC00062A6F /* PrettySectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PrettySectionHeaderView.h; path = ../PrettySectionHeaderView.h; sourceTree = "<group>"; };
+		A9B5076B16786B6800062A6F /* PrettyDrawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrettyDrawing.h; sourceTree = "<group>"; };
+		A9B5076C16786B6800062A6F /* PrettyDrawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrettyDrawing.m; sourceTree = "<group>"; };
+		A9B5076D16786B6800062A6F /* PrettyKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrettyKit.h; sourceTree = "<group>"; };
+		A9B5076F16786C1A00062A6F /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = background.png; path = ../background.png; sourceTree = "<group>"; };
+		A9B5077016786C1A00062A6F /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "background@2x.png"; path = "../background@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +279,7 @@
 		8DE975A81668ECE5005DD0E4 /* Mathebumbler */ = {
 			isa = PBXGroup;
 			children = (
+				A9B5073B1678553300062A6F /* Resources */,
 				8D09F3861677A0D500AD2890 /* textfield.png */,
 				8D09F3871677A0D500AD2890 /* textfield@2x.png */,
 				8D4811FA1677605500947937 /* mtb.png */,
@@ -348,6 +360,11 @@
 		8DE975E81668FB8F005DD0E4 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				A9B5076B16786B6800062A6F /* PrettyDrawing.h */,
+				A9B5076C16786B6800062A6F /* PrettyDrawing.m */,
+				A9B5076D16786B6800062A6F /* PrettyKit.h */,
+				A9B5076816786ADC00062A6F /* PrettySectionHeaderView.m */,
+				A9B5076916786ADC00062A6F /* PrettySectionHeaderView.h */,
 				8DE975E91668FB9A005DD0E4 /* AFNetworking */,
 			);
 			name = Library;
@@ -377,6 +394,15 @@
 				8DE975FC1668FB9A005DD0E4 /* UIImageView+AFNetworking.m */,
 			);
 			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		A9B5073B1678553300062A6F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A9B5076F16786C1A00062A6F /* background.png */,
+				A9B5077016786C1A00062A6F /* background@2x.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -478,6 +504,8 @@
 				8D4811FD1677605500947937 /* mtb@2x.png in Resources */,
 				8D09F3881677A0D500AD2890 /* textfield.png in Resources */,
 				8D09F3891677A0D500AD2890 /* textfield@2x.png in Resources */,
+				A9B5077116786C1A00062A6F /* background.png in Resources */,
+				A9B5077216786C1A00062A6F /* background@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,6 +574,8 @@
 				A919D7351676D4400005FA3E /* MTBTableViewCell.m in Sources */,
 				A919D75C16773C070005FA3E /* BlockActionSheet.m in Sources */,
 				A919D75D16773C070005FA3E /* BlockAlertView.m in Sources */,
+				A9B5076A16786ADC00062A6F /* PrettySectionHeaderView.m in Sources */,
+				A9B5076E16786B6900062A6F /* PrettyDrawing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -665,8 +695,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Volumes/Macintosh HD/Users/boska/Documents/FacebookSDK\"",
 					"\"/Users/bill/Documents/FacebookSDK\"",
+					"\"/Volumes/Macintosh HD/Users/boska/Documents/FacebookSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mathebumbler/Mathebumbler-Prefix.pch";
@@ -683,8 +713,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/Volumes/Macintosh HD/Users/boska/Documents/FacebookSDK\"",
 					"\"/Users/bill/Documents/FacebookSDK\"",
+					"\"/Volumes/Macintosh HD/Users/boska/Documents/FacebookSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mathebumbler/Mathebumbler-Prefix.pch";
@@ -699,6 +729,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Mathebumbler.app/Mathebumbler";
+				CODE_SIGN_ENTITLEMENTS = Yes;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -716,6 +747,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Mathebumbler.app/Mathebumbler";
+				CODE_SIGN_ENTITLEMENTS = Yes;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
