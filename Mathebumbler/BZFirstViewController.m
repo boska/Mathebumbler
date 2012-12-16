@@ -24,9 +24,29 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @synthesize managedObjectContext;
 @synthesize inputField,ouputField,qArray;
 @synthesize fetchedResultsController;
-@synthesize count,sendButton;
+@synthesize count,sendButton,fb_login_button,progress;
 - (void)viewDidLoad
 {
+    BZAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+
+    self.tabBarItem.image = [UIImage imageNamed:@"plus"];
+    //check if fb logon
+    NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
+    if (fb_id) {
+        self.fb_login_button.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"fb_login_"]];
+        [self.fb_login_button setUserInteractionEnabled:NO];
+        //self.fb_login_button.titleLabel.frame = CGRectMake(0, 0, 100, 25);
+        [self.fb_login_button setTitle:[[NSUserDefaults standardUserDefaults] valueForKey:@"fb_name"] forState:UIControlStateNormal];
+
+    } else
+         self.fb_login_button.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"fb_login"]];
+    
+    
+    UISwipeGestureRecognizer *swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+                                                                                                 action:@selector(slideDown:)];
+    swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.view addGestureRecognizer:swipeGestureRecognizer];
+
     count = 0;
     sendButton.hidden = YES;
     [super viewDidLoad];
@@ -41,7 +61,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     BZAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     // The user has initiated a login, so call the openSession method
     // and show the login UX if necessary.
-    [appDelegate openSessionWithAllowLoginUI:YES];
+    [appDelegate openSessionWithAllowLoginUI:YES view:nil];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -61,6 +81,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     switch (count) {
         case 1:
             //dd
+            [self.progress setText:@"1/4"];
             [self.ouputField setText:[NSString stringWithString:inputField.text]];
             [qArray replaceObjectAtIndex:0 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
             inputField.text = @"";
@@ -68,6 +89,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             [inputField becomeFirstResponder];
             break;
         case 2:
+            [self.progress setText:@"2/4"];
+
             [self.ouputField setText:[NSString stringWithFormat:@"%@,%@",self.ouputField.text,inputField.text]];
             [qArray replaceObjectAtIndex:1 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
@@ -78,6 +101,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             break;
         case 3:
             //
+            [self.progress setText:@"3/4"];
+
             [self.ouputField setText:[NSString stringWithFormat:@"%@,%@",self.ouputField.text,inputField.text]];
             [qArray replaceObjectAtIndex:2 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
@@ -87,6 +112,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
             break;
         case 4:{
+            [self.progress setText:@"4/4"];
+
             [self.ouputField setText:[NSString stringWithFormat:@"%@,%@。",self.ouputField.text,inputField.text]];
             [qArray replaceObjectAtIndex:3 withObject:[inputField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
@@ -133,32 +160,39 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 - (IBAction)commit:(id)sender
 {
-    NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
+    //NSString *qua = [NSString stringWithFormat:@"%@,%@,%@,%@",[qArray objectAtIndex:0],[qArray objectAtIndex:1],[qArray objectAtIndex:2],[qArray objectAtIndex:3]];
+    BlockAlertView *alertCheck = [[BlockAlertView alloc]initWithTitle:self.ouputField.text message:@"確定送出?"];
+    [alertCheck addButtonWithTitle:@"YES" handler:^{
+        
+            NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
 
-    NSString *urlstring = [NSString stringWithFormat:@"http://mathebumbler.com/rest/insert?s1=%@&s2=%@&s3=%@&s4=%@&fbid=%@",
-                           [qArray objectAtIndex:0],
-                           [qArray objectAtIndex:1],
-                           [qArray objectAtIndex:2],
-                           [qArray objectAtIndex:3],
-                           fb_id
-                           ];
-    NSLog(@"%@",urlstring);
-    NSURL *url = [NSURL URLWithString:urlstring];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    BlockAlertView *alert =[[BlockAlertView alloc]initWithTitle:@"thank you !" message:@""];
-    alert.cancelButtonIndex = [alert addButtonWithTitle:@"OK" handler:^{
-        //[readerView start];
-    }];
-    AFJSONRequestOperation *rq = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-     
-        sendButton.hidden = YES;
-        [alert show];
+            NSString *urlstring = [NSString stringWithFormat:@"http://mathebumbler.com/rest/insert?s1=%@&s2=%@&s3=%@&s4=%@&fbid=%@",
+                                   [qArray objectAtIndex:0],
+                                   [qArray objectAtIndex:1],
+                                   [qArray objectAtIndex:2],
+                                   [qArray objectAtIndex:3],
+                                   fb_id
+                                   ];
+            NSLog(@"%@",urlstring);
+            NSURL *url = [NSURL URLWithString:urlstring];
+            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+            BlockAlertView *alert =[[BlockAlertView alloc]initWithTitle:@"thank you !" message:@""];
+            alert.cancelButtonIndex = [alert addButtonWithTitle:@"OK" handler:^{
+                //[readerView start];
+            }];
+            AFJSONRequestOperation *rq = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+             
+                sendButton.hidden = YES;
+                [alert show];
 
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-        //
+            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                //
+            }];
+            
+            [rq start];
     }];
-    
-    [rq start];
+    alertCheck.cancelButtonIndex = [alertCheck addButtonWithTitle:@"NO" handler:nil];
+    [alertCheck show];
 }
 - (IBAction)dissmissKeyboard:(id)sender
 {
@@ -202,5 +236,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     	UIView* item = (__bridge UIView *)context;
     	item.transform = CGAffineTransformIdentity;
     }
+}
+- (void)slideDown:(id)sender
+{
+    [self.inputField resignFirstResponder];
 }
 @end

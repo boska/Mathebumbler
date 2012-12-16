@@ -19,6 +19,10 @@
 @property (nonatomic, strong) IBOutlet UIButton *sendButton;
 
 @property (nonatomic ,strong) IBOutlet UILabel *ouputField;
+@property (nonatomic ,strong) IBOutlet UILabel *progress;
+
+@property (nonatomic ,strong) IBOutlet UIButton *fb_login_button;
+
 @property (nonatomic) int count;
 - (IBAction)authButtonAction:(id)sender;
 - (IBAction)dissmissKeyboard:(id)sender;

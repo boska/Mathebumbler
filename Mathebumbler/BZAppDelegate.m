@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "Entity.h"
 #import "AFJSONRequestOperation.h"
+#import "ListViewController.h"
 @implementation BZAppDelegate
 @synthesize managedObjectContext;
 @synthesize persistentStoreCoordinator;
@@ -17,7 +18,9 @@
 NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessionStateChangedNotification";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [self customizeInterface];
     // Override point for customization after application launch.
+    [self getFBNameMe];
     return YES;
 }
 							
@@ -55,10 +58,12 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
 - (void)sessionStateChanged:(FBSession *)session
                       state:(FBSessionState) state
                       error:(NSError *)error
+                       view:(ListViewController *)vc
 {
     switch (state) {
         case FBSessionStateOpen:
             if (!error) {
+                [self getFBNameMe];
                 // We have a valid session
                 NSLog(@"%@",session.accessToken);
                 [[NSUserDefaults standardUserDefaults] setObject:session.accessToken forKey:@"fb_access_token"];
@@ -69,7 +74,9 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
                  {
                      NSLog(@"facebook id: %@", [result valueForKey:@"id"]);
                      [[NSUserDefaults standardUserDefaults] setObject:[result valueForKey:@"id"] forKey:@"fb_id"];
-
+                     if (vc) {
+                         [vc.myTableView  reloadData];
+                     }
                  }];
 
             }
@@ -150,7 +157,7 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
 /*
  * Opens a Facebook session and optionally shows the login UX.
  */
-- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI {
+- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI view:(ListViewController *)vc{
     return [FBSession openActiveSessionWithReadPermissions:nil
                                               allowLoginUI:allowLoginUI
                                          completionHandler:^(FBSession *session,
@@ -158,7 +165,12 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
                                                              NSError *error) {
                                              [self sessionStateChanged:session
                                                                  state:state
-                                                                 error:error];
+                                                                 error:error
+                                                                  view:vc];
+                                             if (vc) {
+                                                 [vc.myTableView reloadData];
+
+                                             }
                                          }];
 }
 -(void)getFBid
@@ -208,7 +220,7 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
     return rq;
 
 }
--(AFJSONRequestOperation *)getFBNameMe
+-(void)getFBNameMe
 {
     FBSession *session;
     session = FBSession.activeSession;
@@ -218,9 +230,20 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     AFJSONRequestOperation *rq = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
+        NSString *user_name = [JSON valueForKey:@"name"];
+         [[NSUserDefaults standardUserDefaults] setObject:user_name forKey:@"fb_name"];
+        
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         //
     }];
-    return rq;
+    [rq start];
+}
+- (void)customizeInterface
+{
+    UIImage* tabBarBackground = [UIImage imageNamed:@"tabbar"];
+    [[UITabBar appearance] setBackgroundImage:tabBarBackground];
+    UIImage *selection = [[UIImage imageNamed:@"selection-tab"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
+    [[UITabBar appearance] setSelectionIndicatorImage:selection];
+     
 }
 @end

@@ -57,7 +57,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.refreshControl setTintColor:UIColorFromRGB(0x66C1FF)];
     [self.refreshControl setBackgroundColor:BACKGROUND];
     //    self.refreshControl.tintColor = [UIColor blueColor];
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"PullToRefresh"];
+    //self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"PullToRefresh"];
     [self.refreshControl addTarget:self action:@selector(pulldown:) forControlEvents:UIControlEventValueChanged];
     AFJSONRequestOperation *rq =  [appDelegate loadQuotesFromTo:[NSNumber numberWithInt:currentPage]:[NSNumber numberWithInt:QsPerPage] ];
    [rq setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -68,8 +68,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
        NSArray *uid = [NSArray arrayWithArray:[responseObject valueForKey:@"member_num"]];
        NSArray *qid = [NSArray arrayWithArray:[responseObject valueForKey:@"num"]];
        NSArray *date = [NSArray arrayWithArray:[responseObject valueForKey:@"buildtime"]];
-       NSArray *votegreen = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_like"]];
-       NSArray *voteblue = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_dislike"]];
+       NSArray *voteblue = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_like"]];
+       NSArray *votegreen = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_dislike"]];
        
        for (int i=0;i<subject1.count;i++) {
            
@@ -109,12 +109,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
            
            NSURL *urlvote = [NSURL URLWithString:[NSString stringWithFormat:@"http://mathebumbler.com/rest/list_single?n=%@&fbid=%@",e.qid,fb_id]];
            NSURLRequest *requestvote = [NSURLRequest requestWithURL:urlvote];
-
+           NSLog(@"%@",urlvote);
            AFJSONRequestOperation *getVotekind = [AFJSONRequestOperation JSONRequestOperationWithRequest:requestvote success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                 //
-               NSString *votekind = [[JSON valueForKey:@"vote_kind"] lastObject];
                if ([[JSON valueForKey:@"vote_kind"] lastObject] != [NSNull null]) {
-                   
+                    NSString *votekind = [[JSON valueForKey:@"vote_kind"] lastObject];
+
                    
                    if ([votekind isEqualToString:@"blue"]) {
                        // NSLog(@"%@,%@",qid,[[JSON valueForKey:@"vote_kind"] lastObject]);
@@ -214,6 +214,26 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MTBTableViewCell" owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
+    
+    NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
+    //fb not login
+    if (!fb_id) {
+        UITapGestureRecognizer *fbTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loginFB:)];
+        fbTap.delegate = self;
+        [cell.fb_rq addGestureRecognizer:fbTap];
+        [cell.fb_rq setHidden:NO];
+        [cell.green setHidden:YES];
+        [cell.blue setHidden:YES];
+        [cell.greencount setHidden:YES];
+        [cell.blueconut setHidden:YES];
+    } else{
+        [cell.fb_rq setHidden:YES];
+        [cell.green setHidden:NO];
+        [cell.blue setHidden:NO];
+        [cell.greencount setHidden:NO];
+        [cell.blueconut setHidden:NO];
+    }
+    
     //Entity *e = [fetchObjects objectAtIndex:indexPath.row];
     Entity *e = [self.fetchedResultsController objectAtIndexPath:indexPath];
     //NSLog(@"%@",e.votekind);
@@ -237,21 +257,37 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     cell.name.text = e.name;
     cell.date.text = [formatter stringFromDate:e.date];
     cell.quotes.text = [NSString stringWithFormat:@"%@,%@,%@,%@。",e.subject1,e.subject2,e.subject3,e.subject4];
-    [cell.blue setBackgroundImage:[UIImage imageNamed:@"blue"] forState:UIControlStateNormal];
-    //cell.blue.titleLabel.text = [NSString stringWithFormat:@"%d",e.voteblue.intValue];
+    
     cell.blueconut.text =  [NSString stringWithFormat:@"%d",e.voteblue.intValue];
-    [cell.green setBackgroundImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
-    //cell.green.titleLabel.text = [NSString stringWithFormat:@"%d",e.votegreen.intValue];
     cell.greencount.text =  [NSString stringWithFormat:@"%d",e.votegreen.intValue];
 
     [cell.blue setBackgroundColor:[UIColor clearColor]];
     [cell.green setBackgroundColor:[UIColor clearColor]];
 
     if ([e.votekind isEqualToString:@"blue"]) {
-        [cell.blue setBackgroundImage:[UIImage imageNamed:@"blue_"] forState:UIControlStateNormal];;
+        [cell.blue setBackgroundImage:[UIImage imageNamed:@"blue_"] forState:UIControlStateNormal];
+        [cell.green setBackgroundImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+
+        //[cell.green setUserInteractionEnabled:NO];
+        [cell.green setEnabled:NO];
+        [cell.blue setEnabled:YES];
+
     } else if ([e.votekind isEqualToString:@"green"])
     {
-        [cell.green setBackgroundImage:[UIImage imageNamed:@"green_"] forState:UIControlStateNormal];;
+        [cell.green setBackgroundImage:[UIImage imageNamed:@"green_"] forState:UIControlStateNormal];
+        [cell.blue setBackgroundImage:[UIImage imageNamed:@"blue"] forState:UIControlStateNormal];
+
+        //[cell.blue setUserInteractionEnabled:NO];
+        [cell.blue setEnabled:NO];
+        [cell.green setEnabled:YES];
+    } else {
+        [cell.green setBackgroundImage:[UIImage imageNamed:@"green"] forState:UIControlStateNormal];
+        [cell.blue setBackgroundImage:[UIImage imageNamed:@"blue"] forState:UIControlStateNormal];
+
+        //[cell.blue setUserInteractionEnabled:NO];
+        [cell.blue setEnabled:YES];
+        [cell.green setEnabled:YES];
+    
     }
     UITapGestureRecognizer *greenTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(voteGreen:)];
     UITapGestureRecognizer *blueTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(voteBlue:)];
@@ -386,7 +422,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     sheet.destructiveButtonIndex = [sheet addButtonWithTitle:@"cancel" handler:nil];
     BZAppDelegate *appDelegte = (BZAppDelegate *)[[UIApplication sharedApplication] delegate];
     [sheet showInView:appDelegte.window.rootViewController.view];
-    NSLog(@"%@",cell.quotes.text);
+    NSLog(@"%@,%d",cell.quotes.text,cell.tag);
 }
 - (void)updateVoteStatus:(NSString *)qid andIndexPath:(NSIndexPath*)indexpath
 {
@@ -396,19 +432,21 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     UITapGestureRecognizer *gesture = (UITapGestureRecognizer *)sender;
     NSIndexPath *path =  [self.myTableView indexPathForRowAtPoint:[gesture locationInView:self.myTableView]];
-    //MTBTableViewCell *cell = (MTBTableViewCell*)[self.myTableView cellForRowAtIndexPath:path];
+    MTBTableViewCell *cell = (MTBTableViewCell*)[self.myTableView cellForRowAtIndexPath:path];
     Entity *e = [self.fetchedResultsController objectAtIndexPath:path];
     NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
 
     if ([e.votekind isEqualToString:@"green"]) {
         e.votekind = @"none";
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://mathebumbler.com/vote_api.php?type=dis&n=%@&fbid=%@&kind=green",e.qid,fb_id]];
+        NSLog(@"%@",url);
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *rq = [[AFHTTPRequestOperation alloc]initWithRequest:request];
         [rq setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"suc dis green");
             int value = [e.votegreen intValue];
             e.votegreen = [NSNumber numberWithInt:value - 1];
+            [cell.blue setEnabled:YES];
             [self.myTableView reloadData];
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -417,12 +455,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         [rq start];
     } else {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://mathebumbler.com/vote_api.php?type=add&n=%@&fbid=%@&kind=green",e.qid,fb_id]];
+        NSLog(@"%@",url);
+
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *rq = [[AFHTTPRequestOperation alloc]initWithRequest:request];
         [rq setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"suc add green");
             int value = [e.votegreen intValue];
             e.votegreen = [NSNumber numberWithInt:value + 1];
+            [cell.blue setEnabled:NO];
+
             [self.myTableView reloadData];
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -440,18 +482,21 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     UITapGestureRecognizer *gesture = (UITapGestureRecognizer *)sender;
     NSIndexPath *path =  [self.myTableView indexPathForRowAtPoint:[gesture locationInView:self.myTableView]];
-    //MTBTableViewCell *cell = (MTBTableViewCell*)[self.myTableView cellForRowAtIndexPath:path];
+    MTBTableViewCell *cell = (MTBTableViewCell*)[self.myTableView cellForRowAtIndexPath:path];
     Entity *e = [self.fetchedResultsController objectAtIndexPath:path];
     NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
 
     if ([e.votekind isEqualToString:@"blue"]) {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://mathebumbler.com/vote_api.php?type=dis&n=%@&fbid=%@&kind=blue",e.qid,fb_id]];
+        NSLog(@"%@",url);
+
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *rq = [[AFHTTPRequestOperation alloc]initWithRequest:request];
         [rq setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"suc dis blue");
             int value = [e.voteblue intValue];
             e.voteblue = [NSNumber numberWithInt:value - 1];
+            [cell.green setEnabled:YES];
             [self.myTableView reloadData];
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -464,12 +509,14 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         
     } else {
         NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://mathebumbler.com/vote_api.php?type=add&n=%@&fbid=%@&kind=blue",e.qid,fb_id]];
+        NSLog(@"%@",url);
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *rq = [[AFHTTPRequestOperation alloc]initWithRequest:request];
         [rq setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"suc add blue");
             int value = [e.voteblue intValue];
             e.voteblue = [NSNumber numberWithInt:value + 1];
+            [cell.green setEnabled:NO];
             [self.myTableView reloadData];
 
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -675,7 +722,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //}
     
     //   fetchedResultsController.delegate = self;
-    [myTableView reloadData];
+    //[myTableView reloadData];
     //
     
     AFJSONRequestOperation *rq =  [appDelegate loadQuotesFromTo:[NSNumber numberWithInt:currentPage]:[NSNumber numberWithInt:QsPerPage] ];
@@ -781,4 +828,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     //[self.refreshControl endRefreshing];
     // reconnect after mass delete
  }
+-(void)loginFB:(id)sender
+{
+    BZAppDelegate *appDelegate = (BZAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate openSessionWithAllowLoginUI:YES view:self];
+}
 @end

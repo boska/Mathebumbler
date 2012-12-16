@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "AFJSONRequestOperation.h"
+#import "ListViewController.h"
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
@@ -26,8 +27,8 @@ extern NSString *const FBSessionStateChangedNotification;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI;
+- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI view:(ListViewController *)vc;
 - (void)getFBid;
 - (AFJSONRequestOperation *)loadQuotesFromTo:(NSNumber *)from:(NSNumber *)to;
-- (AFJSONRequestOperation *)getFBNameMe;
+- (void)getFBNameMe;
 @end

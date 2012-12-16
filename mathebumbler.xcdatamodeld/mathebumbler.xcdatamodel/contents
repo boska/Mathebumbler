@@ -14,6 +14,6 @@
         <attribute name="votekind" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Entity" positionX="-63" positionY="-18" width="128" height="210"/>
+        <element name="Entity" positionX="-10620" positionY="269" width="128" height="208"/>
     </elements>
 </model>

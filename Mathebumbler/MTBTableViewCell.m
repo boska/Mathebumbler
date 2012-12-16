@@ -16,6 +16,7 @@
 @synthesize blue;
 @synthesize green;
 @synthesize blueconut;
+@synthesize fb_rq;
 @synthesize greencount;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
