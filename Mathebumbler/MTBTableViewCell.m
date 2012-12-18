@@ -7,7 +7,7 @@
 //
 
 #import "MTBTableViewCell.h"
-
+#import <QuartzCore/QuartzCore.h>
 @implementation MTBTableViewCell
 @synthesize name;
 @synthesize quotes;
@@ -23,6 +23,11 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        gradient.frame = self.bounds;
+        gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor whiteColor]CGColor], (id)[[UIColor redColor]CGColor], nil];
+        [self.layer addSublayer:gradient];
+
         
     }
     return self;

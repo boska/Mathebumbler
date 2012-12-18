@@ -20,5 +20,7 @@
 @property (nonatomic) BOOL loadingState;
 @property (nonatomic, strong) NSMutableArray *fetchObjects;
 @property (nonatomic, strong) IBOutlet UITableView *myTableView;
+@property (nonatomic, strong) IBOutlet UINavigationItem *titleView;
+@property (nonatomic, strong) IBOutlet UILabel *header;
 
 @end

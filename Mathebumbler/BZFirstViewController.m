@@ -52,7 +52,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [super viewDidLoad];
     qArray = [NSMutableArray arrayWithObjects:@"",@"",@"",@"",nil];
     inputField.delegate = self;
-    [[UINavigationBar appearance] setTintColor:[UIColor brownColor]];
         [self.view setBackgroundColor:UIColorFromRGB(0x7ACEFF)];
     
 

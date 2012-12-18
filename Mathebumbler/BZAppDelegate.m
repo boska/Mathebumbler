@@ -190,8 +190,8 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
         NSArray *qid = [NSArray arrayWithArray:[JSON valueForKey:@"num"]];
 
         NSArray *date = [NSArray arrayWithArray:[JSON valueForKey:@"buildtime"]];
-        NSArray *votegreen = [NSArray arrayWithArray:[JSON valueForKey:@"vote_like"]];
-        NSArray *voteblue = [NSArray arrayWithArray:[JSON valueForKey:@"vote_dislike"]];
+        NSArray *votegreen = [NSArray arrayWithArray:[JSON valueForKey:@"vote_dislike"]];
+        NSArray *voteblue = [NSArray arrayWithArray:[JSON valueForKey:@"vote_like"]];
 
         for (int i=0;i<subject1.count;i++) {
             
@@ -240,6 +240,12 @@ NSString *const FBSessionStateChangedNotification =@"boska.mathebumbler:FBSessio
 }
 - (void)customizeInterface
 {
+    [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIColor whiteColor], UITextAttributeTextColor,
+      [UIFont fontWithName:@"MarkerFelt-Thin" size:24], UITextAttributeFont,
+     [UIColor blackColor],UITextAttributeTextShadowColor,nil]];
     UIImage* tabBarBackground = [UIImage imageNamed:@"tabbar"];
     [[UITabBar appearance] setBackgroundImage:tabBarBackground];
     UIImage *selection = [[UIImage imageNamed:@"selection-tab"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];

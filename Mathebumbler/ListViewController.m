@@ -14,9 +14,11 @@
 #import "UIImageView+AFNetworking.h"
 #import "BlockActionSheet.h"
 #import "PrettySectionHeaderView.h"
-
+#import <QuartzCore/QuartzCore.h> 
 #define QsPerPage 10
 #define BACKGROUND [UIColor colorWithPatternImage:[UIImage imageNamed:@"background"]]
+#define START_COLOR UIColorFromRGB(0x7BCEFD)
+#define END_COLOR UIColorFromRGB(0x73C1ED)
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
@@ -33,11 +35,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 @synthesize currentPage;
 @synthesize endPage;
 @synthesize loadingState;
+@synthesize titleView;
+@synthesize header;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        UILabel *custom = [[UILabel alloc]init];
+        [custom setText:@"123"];
+        [self.titleView setTitle:@"@"];
     }
     return self;
 }
@@ -49,13 +56,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [super viewDidLoad];
      BZAppDelegate *appDelegate = (BZAppDelegate *)[[UIApplication sharedApplication] delegate];
     myTableView.dataSource = self;
+    //[myTableView setContentInset:UIEdgeInsetsMake(44,0,0,0)];
+    
     myTableView.delegate = self;
-    myTableView.backgroundColor = BACKGROUND;
+    myTableView.backgroundColor = [UIColor blackColor];
     managedObjectContext = appDelegate.managedObjectContext;
     //
     self.refreshControl = [[UIRefreshControl alloc]init];
     [self.refreshControl setTintColor:UIColorFromRGB(0x66C1FF)];
-    [self.refreshControl setBackgroundColor:BACKGROUND];
+    [self.refreshControl setBackgroundColor: [UIColor blackColor]];
+    
     //    self.refreshControl.tintColor = [UIColor blueColor];
     //self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"PullToRefresh"];
     [self.refreshControl addTarget:self action:@selector(pulldown:) forControlEvents:UIControlEventValueChanged];
@@ -114,11 +124,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                 //
                if ([[JSON valueForKey:@"vote_kind"] lastObject] != [NSNull null]) {
                     NSString *votekind = [[JSON valueForKey:@"vote_kind"] lastObject];
+                   NSString *vb = [[JSON valueForKey:@"vote_like"] lastObject];
+                   NSString *vg = [[JSON valueForKey:@"vote_dislike"] lastObject];
+                   
+                   [e setVotegreen:[NSNumber numberWithInt:vg.intValue]];
+                   [e setVoteblue:[NSNumber numberWithInt:vb.intValue]];
 
                    
                    if ([votekind isEqualToString:@"blue"]) {
                        // NSLog(@"%@,%@",qid,[[JSON valueForKey:@"vote_kind"] lastObject]);
                        e.votekind = @"blue";
+                       
                    } else if ([votekind isEqualToString:@"green"])
                    {
                        e.votekind = @"green";
@@ -150,6 +166,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
        self.fetchedResultsController = controller;
        [self.fetchedResultsController performFetch:nil];
        [self.myTableView reloadData];
+       [myTableView setContentOffset:CGPointMake(0, 44) animated:NO];
+       [header setHidden:NO];
        NSLog(@"%d secs",self.fetchedResultsController.sections.count);
        
        //fetchObjects = [NSMutableArray arrayWithArray:[managedObjectContext executeFetchRequest:fetchRequest error:nil]];
@@ -209,10 +227,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
      //NSLog(@"%d,%d",indexPath.row,indexPath.section);
     static NSString *CellIdentifier = @"MTBTableViewCell";
     MTBTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background" ]];
+    //cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background" ]];
+    
     if (cell == nil) {
+       
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MTBTableViewCell" owner:self options:nil];
         cell = [nib objectAtIndex:0];
+       // UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        gradient.frame = cell.bounds;
+        gradient.colors = [NSArray arrayWithObjects:(id)[START_COLOR CGColor], (id)[END_COLOR CGColor], nil];
+        [cell.layer insertSublayer:gradient atIndex:0];
     }
     
     NSString *fb_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"fb_id"];
@@ -252,7 +277,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
     //cell.thumbnail = [[UIImageView alloc]init];
     
-    [cell.thumbnail setImageWithURL:url placeholderImage:[UIImage imageNamed:@"background"]];
+    [cell.thumbnail setImageWithURL:url placeholderImage:[UIImage imageNamed:@"fb_thumb.jpg"]];
     cell.tag = e.qid.intValue;
     cell.name.text = e.name;
     cell.date.text = [formatter stringFromDate:e.date];
@@ -412,9 +437,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     MTBTableViewCell *cell = (MTBTableViewCell *)[self tableView:myTableView cellForRowAtIndexPath:indexPath];
     
     BlockActionSheet *sheet = [[BlockActionSheet alloc]initWithTitle:@""];
-    [sheet addButtonWithTitle:@"Comment" handler:^{
+    //[sheet addButtonWithTitle:@"Comment" handler:^{
         
-    }];
+    //}];
     [sheet addButtonWithTitle:@"Copy" handler:^{
         [UIPasteboard generalPasteboard].string = cell.quotes.text;
     }];
@@ -643,7 +668,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                 //
                 NSString *votekind = [[JSON valueForKey:@"vote_kind"] lastObject];
                 if ([[JSON valueForKey:@"vote_kind"] lastObject] != [NSNull null]) {
+                    NSString *vb = [[JSON valueForKey:@"vote_like"] lastObject];
+                    NSString *vg = [[JSON valueForKey:@"vote_dislike"] lastObject];
                     
+                    [e setVotegreen:[NSNumber numberWithInt:vg.intValue]];
+                    [e setVoteblue:[NSNumber numberWithInt:vb.intValue]];
+
                     
                     if ([votekind isEqualToString:@"blue"]) {
                         // NSLog(@"%@,%@",qid,[[JSON valueForKey:@"vote_kind"] lastObject]);
@@ -734,8 +764,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         NSArray *uid = [NSArray arrayWithArray:[responseObject valueForKey:@"member_num"]];
         NSArray *qid = [NSArray arrayWithArray:[responseObject valueForKey:@"num"]];
         NSArray *date = [NSArray arrayWithArray:[responseObject valueForKey:@"buildtime"]];
-        NSArray *votegreen = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_like"]];
-        NSArray *voteblue = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_dislike"]];
+        NSArray *votegreen = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_dislike"]];
+        NSArray *voteblue = [NSArray arrayWithArray:[responseObject valueForKey:@"vote_like"]];
         
         for (int i=0;i<subject1.count;i++) {
             

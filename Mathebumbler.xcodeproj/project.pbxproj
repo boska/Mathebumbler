@@ -23,6 +23,10 @@
 /* Begin PBXBuildFile section */
 		8D09F3881677A0D500AD2890 /* textfield.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D09F3861677A0D500AD2890 /* textfield.png */; };
 		8D09F3891677A0D500AD2890 /* textfield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D09F3871677A0D500AD2890 /* textfield@2x.png */; };
+		8D0AEE60167F3DB6009FBD79 /* icon2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8D0AEE5F167F3DB6009FBD79 /* icon2.png */; };
+		8D0AEEA1167F5A70009FBD79 /* BZNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D0AEEA0167F5A70009FBD79 /* BZNavigationController.m */; };
+		8D0AEEA3167F5F5B009FBD79 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D0AEEA2167F5F5B009FBD79 /* QuartzCore.framework */; };
+		8D0AEEA5167F65AD009FBD79 /* fb_thumb.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8D0AEEA4167F65AD009FBD79 /* fb_thumb.jpg */; };
 		8D429DE01674E5FA00865019 /* mathebumbler.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8D429DDE1674E5FA00865019 /* mathebumbler.xcdatamodeld */; };
 		8D429DE31674E6F700865019 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D429DE21674E6F700865019 /* CoreData.framework */; };
 		8D429E251674EC1400865019 /* _Entity.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D429E221674EC1400865019 /* _Entity.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -125,6 +129,11 @@
 /* Begin PBXFileReference section */
 		8D09F3861677A0D500AD2890 /* textfield.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textfield.png; sourceTree = "<group>"; };
 		8D09F3871677A0D500AD2890 /* textfield@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textfield@2x.png"; sourceTree = "<group>"; };
+		8D0AEE5F167F3DB6009FBD79 /* icon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon2.png; sourceTree = "<group>"; };
+		8D0AEE9F167F5A70009FBD79 /* BZNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BZNavigationController.h; path = ../BZNavigationController.h; sourceTree = "<group>"; };
+		8D0AEEA0167F5A70009FBD79 /* BZNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BZNavigationController.m; path = ../BZNavigationController.m; sourceTree = "<group>"; };
+		8D0AEEA2167F5F5B009FBD79 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		8D0AEEA4167F65AD009FBD79 /* fb_thumb.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fb_thumb.jpg; sourceTree = "<group>"; };
 		8D429DDF1674E5FA00865019 /* mathebumbler.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mathebumbler.xcdatamodel; sourceTree = "<group>"; };
 		8D429DE21674E6F700865019 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		8D429E211674EC1400865019 /* _Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Entity.h; sourceTree = SOURCE_ROOT; };
@@ -246,6 +255,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D0AEEA3167F5F5B009FBD79 /* QuartzCore.framework in Frameworks */,
 				8D429DE31674E6F700865019 /* CoreData.framework in Frameworks */,
 				8DFBE3EA16746160004636DF /* Accounts.framework in Frameworks */,
 				8DFBE3E816746155004636DF /* AdSupport.framework in Frameworks */,
@@ -300,6 +310,8 @@
 		8DE975931668ECE4005DD0E4 = {
 			isa = PBXGroup;
 			children = (
+				8D0AEEA2167F5F5B009FBD79 /* QuartzCore.framework */,
+				8D0AEE5F167F3DB6009FBD79 /* icon2.png */,
 				8D680976167C543F0023EE16 /* mtbicon.png */,
 				8D680965167C4BE30023EE16 /* Default-568h@2x.png */,
 				8D429DE21674E6F700865019 /* CoreData.framework */,
@@ -350,6 +362,7 @@
 				A919D75916773C070005FA3E /* BlockActionSheet.m */,
 				A919D75A16773C070005FA3E /* BlockAlertView.h */,
 				A919D75B16773C070005FA3E /* BlockAlertView.m */,
+				8D0AEEA4167F65AD009FBD79 /* fb_thumb.jpg */,
 				A919D7421677334D0005FA3E /* blue_.png */,
 				A919D7431677334D0005FA3E /* blue_@2x.png */,
 				A919D7441677334E0005FA3E /* blue.png */,
@@ -364,6 +377,8 @@
 				8DE975E81668FB8F005DD0E4 /* Library */,
 				8DE975B11668ECE5005DD0E4 /* BZAppDelegate.h */,
 				8D429DDE1674E5FA00865019 /* mathebumbler.xcdatamodeld */,
+				8D0AEE9F167F5A70009FBD79 /* BZNavigationController.h */,
+				8D0AEEA0167F5A70009FBD79 /* BZNavigationController.m */,
 				8DE975B21668ECE5005DD0E4 /* BZAppDelegate.m */,
 				8DE975BA1668ECE5005DD0E4 /* MainStoryboard.storyboard */,
 				8D429E271674F52C00865019 /* ListViewController.h */,
@@ -606,6 +621,8 @@
 				8D680977167C543F0023EE16 /* mtbicon.png in Resources */,
 				8DB15E7B167E165A00FC959F /* fb_rq@2x.png in Resources */,
 				8DB15E7C167E165A00FC959F /* fb_rq.png in Resources */,
+				8D0AEE60167F3DB6009FBD79 /* icon2.png in Resources */,
+				8D0AEEA5167F65AD009FBD79 /* fb_thumb.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,6 +693,7 @@
 				A919D75D16773C070005FA3E /* BlockAlertView.m in Sources */,
 				A9B5076A16786ADC00062A6F /* PrettySectionHeaderView.m in Sources */,
 				A9B5076E16786B6900062A6F /* PrettyDrawing.m in Sources */,
+				8D0AEEA1167F5A70009FBD79 /* BZNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
